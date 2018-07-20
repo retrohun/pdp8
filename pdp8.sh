@@ -40,7 +40,7 @@ while ((!hlt)); do
     ))
     if((f8&&operand<6)) # Indirect addressing
     then
-        ((address|7==017))&&((memory[address]=memory[address]+1&07777))
+        (((address&07770)==010))&&((memory[address]=memory[address]+1&07777))
         ((address=memory[address]))
     fi
     case $operand in
