@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Simple PDP5/PDP8 emulator v0.9
+# Simple PDP5/PDP8 emulator v0.9.1
 #
 memory=(0{,,,}{,,,}{,,,}{,,,}{,,,}{,,,})  # Memory array - 4kW
 pc=0             # Program counter
@@ -35,7 +35,7 @@ erortext="[
 ]
 "
 echo '
-Simple PDP5/PDP8 emulator v0.9
+Simple PDP5/PDP8 emulator v0.9.1
 by NASZVADI Peter, 1980-2018
 
 (: Now in bash :)
@@ -70,7 +70,13 @@ while :; do
     R*) ((prompt^=1));hlt=1;step=0;dumpaddress=-1 ;;
     Q*) break ;;
     S*) step=1;hlt=0;lineprev=S;dumpaddress=-1 ;;
-    T*) hlt=1;echo '[ERROR: not implemented yet]';step=0;dumpaddress=-1 ;;
+    T*) if [[ -r ${linecurr#T} ]]; then
+            while read b4; do
+                ((b1/100==1))&&memory[$[0${b1#?}${b2#?}]]=$[0$b3${b4#?}]
+                b1=$b2;b2=$b3;b3=$b4
+            done < <(od -Anone -bvw1 "${linecurr#T}")
+        fi
+        hlt=1;step=0;dumpaddress=-1 ;;
     '. '*) step=0;hlt=1;dumpaddress=-1;eval "$linecurr" ;;
     \?*|H*) echo "$helptext";hlt=1;step=0 ;;
     =*) lac=$((${linecurr#=}));hlt=1;step=0;dumpaddress=-1 ;;
