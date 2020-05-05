@@ -123,9 +123,8 @@ sys     0m8.24s
 $
 ```
 
-## Caveats
-Depends on *od*, a 3rd party program in order to load punch tape image files - as memory patch files.
-Command "T" won't work without it.
+## Removed dependencies
+As from version 1.0, can work standalone - without "od" having installed.
 
 ## TODO
 A lot. Cleanup, optimization, add correct implementation of devices, add support for bash 3.x in OSX etc.
